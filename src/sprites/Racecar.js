@@ -1,4 +1,4 @@
-import Phaser, { Math } from 'phaser'
+import Phaser from 'phaser'
 import GameManager from '../GameManager'
 
 export default class Racecar {
