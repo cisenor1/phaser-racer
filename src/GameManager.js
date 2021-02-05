@@ -1,4 +1,4 @@
-import Input from './input/Input'
+import InputManager from './input/InputManager'
 
 export default class GameManager {
   static _instance = null
@@ -10,14 +10,14 @@ export default class GameManager {
   }
 
   initialize (scene) {
-    this.input = new Input(scene)
+    this.inputManager = new InputManager(scene)
   }
 
   update (time, delta) {
-    this.input.update(time, delta)
+    this.inputManager.update(time, delta)
   }
 
-  getInput () {
-    return this.input
+  getInputManager () {
+    return this.inputManager
   }
 }

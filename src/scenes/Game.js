@@ -1,4 +1,3 @@
-/* globals __DEV__ */
 import Phaser from 'phaser'
 import GameManager from '../GameManager'
 import Racecar from '../sprites/Racecar'
@@ -29,7 +28,5 @@ export default class extends Phaser.Scene {
   update (time, delta) {
     this.gameManager.update(time, delta)
     this.player.update(time, delta)
-    console.log(this.gameManager.getInput().current.restart)
-    if (this.gameManager.getInput().current.restart) this.restart()
   }
 }
