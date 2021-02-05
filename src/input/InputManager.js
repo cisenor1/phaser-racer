@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 
-export default class Input {
+export default class InputManager {
   KEYS = {
     up: undefined,
     down: undefined,

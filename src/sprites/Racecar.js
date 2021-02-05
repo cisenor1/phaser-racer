@@ -1,19 +1,20 @@
 import Phaser from 'phaser'
-import GameManager from '../GameManager'
+import inputMixin from '../input/InputMixin'
 
-export default class Racecar {
-  FRICTION = 0.001
-  AIR_FRICTION = 0.005
-  STATIC_FRICTION = 1
-  MAX_VELOCITY = 2
-  MOVEMENT_SPEED = 0.01
-  BRAKE_FORCE = 2
-  ROTATION_SPEED = 2
+class GameObject {}
+export default class Racecar extends inputMixin(GameObject) {
+  FRICTION = 0.001;
+  AIR_FRICTION = 0.005;
+  STATIC_FRICTION = 1;
+  MAX_VELOCITY = 2;
+  MOVEMENT_SPEED = 0.01;
+  BRAKE_FORCE = 2;
+  ROTATION_SPEED = 2;
   constructor ({ scene, startPoint }) {
+    super()
     this.initializeDebug(scene)
 
     scene.events.on('update', this.update, this)
-    this.input = GameManager.instance().getInput()
     this.sprite = scene.matter.add.sprite(0, 0, 'player-car', 0)
     this.initializeMatterBody(startPoint)
   }
@@ -62,18 +63,22 @@ export default class Racecar {
   }
 
   handleInputs () {
-    const current = this.input.getCurrent()
+    const current = this.getInput()
     this.setThrottle(current.throttle)
     this.setSteering(current.x)
     this.setBrake(current.brake)
   }
 
   handleTelemetry () {
-    this.debugTexts.push(`Speed: ${new Phaser.Math.Vector2(this.sprite.body.velocity).length()}`)
+    this.debugTexts.push(
+      `Speed: ${new Phaser.Math.Vector2(this.sprite.body.velocity).length()}`
+    )
   }
 
   setThrottle (throttle) {
-    const velocity = new Phaser.Math.Vector2(this.sprite.body.velocity).length()
+    const velocity = new Phaser.Math.Vector2(
+      this.sprite.body.velocity
+    ).length()
     this.debugTexts.push(`Throttle: ${throttle}`)
     if (throttle > 0) {
       if (velocity < this.MAX_VELOCITY) {
@@ -88,12 +93,16 @@ export default class Racecar {
 
   setBrake (brake) {
     this.debugTexts.push(`Brake: ${brake}`)
-    this.sprite.setFrictionAir(this.AIR_FRICTION + (brake * this.deltaTime * this.BRAKE_FORCE))
+    this.sprite.setFrictionAir(
+      this.AIR_FRICTION + brake * this.deltaTime * this.BRAKE_FORCE
+    )
   }
 
   setSteering (steering) {
     this.debugTexts.push(`Steering: ${steering}`)
-    this.sprite.setAngularVelocity(steering * this.ROTATION_SPEED * this.deltaTime)
+    this.sprite.setAngularVelocity(
+      steering * this.ROTATION_SPEED * this.deltaTime
+    )
   }
 
   debug () {
